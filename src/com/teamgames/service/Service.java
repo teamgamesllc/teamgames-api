@@ -1,4 +1,4 @@
-package com.everythingrs.service;
+package com.teamgames.service;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -6,10 +6,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.everythingrs.model.ers.*;
-import com.everythingrs.service.TickHandler;
 import com.teamgames.hiscores.Hiscores;
 import com.teamgames.model.Model;
+import com.teamgames.model.ers.*;
+import com.teamgames.service.TickHandler;
 
 public class Service {
 

@@ -1,4 +1,4 @@
-package com.everythingrs.net;
+package com.teamgames.net;
 
 //import io.netty.buffer.ByteBuf;
 //import io.netty.channel.ChannelFutureListener;

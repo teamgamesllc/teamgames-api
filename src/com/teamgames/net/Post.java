@@ -1,4 +1,4 @@
-package com.everythingrs.net;
+package com.teamgames.net;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

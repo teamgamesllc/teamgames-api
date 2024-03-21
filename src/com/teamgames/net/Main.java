@@ -1,6 +1,6 @@
-package com.everythingrs.net;
+package com.teamgames.net;
 
-import com.everythingrs.service.Service;
+import com.teamgames.service.Service;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package com.everythingrs.net;
+package com.teamgames.net;
 
 public class Management {
 	

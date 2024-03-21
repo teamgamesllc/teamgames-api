@@ -1,6 +1,6 @@
 package com.teamgames.net.packet;
 
-import com.everythingrs.net.packet.impl.*;
+import com.teamgames.net.packet.impl.*;
 
 public class PacketHandler {
 

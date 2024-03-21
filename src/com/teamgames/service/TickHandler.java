@@ -1,4 +1,4 @@
-package com.everythingrs.service;
+package com.teamgames.service;
 
 public class TickHandler implements Runnable {
 	

@@ -1,4 +1,4 @@
-package com.everythingrs.marketplace;
+package com.teamgames.marketplace;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.everythingrs.net.Post;
 import com.teamgames.lib.gson.Gson;
+import com.teamgames.net.Post;
 
 /**
  * Handles trade data

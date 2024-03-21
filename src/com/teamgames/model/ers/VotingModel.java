@@ -1,4 +1,4 @@
-package com.everythingrs.model.ers;
+package com.teamgames.model.ers;
 
 import com.teamgames.model.Model;
 

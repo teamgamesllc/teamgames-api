@@ -1,4 +1,4 @@
-package com.everythingrs.playersonline;
+package com.teamgames.playersonline;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -7,8 +7,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.everythingrs.net.Post;
 import com.teamgames.lib.gson.Gson;
+import com.teamgames.net.Post;
 
 /**
  * 

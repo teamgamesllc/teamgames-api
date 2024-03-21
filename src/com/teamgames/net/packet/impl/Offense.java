@@ -1,4 +1,4 @@
-package com.everythingrs.net.packet.impl;
+package com.teamgames.net.packet.impl;
 
 import java.util.Map;
 

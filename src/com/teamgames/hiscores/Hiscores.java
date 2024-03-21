@@ -1,8 +1,8 @@
 package com.teamgames.hiscores;
 
-import com.everythingrs.model.ers.HiscoresModel;
-import com.everythingrs.net.HTTPS;
-import com.everythingrs.net.Main;
+import com.teamgames.model.ers.HiscoresModel;
+import com.teamgames.net.HTTPS;
+import com.teamgames.net.Main;
 
 /**
  * @author Nelson

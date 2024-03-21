@@ -1,7 +1,7 @@
 package com.teamgames.commands;
 
-import com.everythingrs.net.Post;
 import com.teamgames.lib.gson.Gson;
+import com.teamgames.net.Post;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.everythingrs.marketplace;
+package com.teamgames.marketplace;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
