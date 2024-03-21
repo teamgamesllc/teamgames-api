@@ -5,7 +5,7 @@ import com.everythingrs.net.HTTPS;
 import com.everythingrs.net.Main;
 
 /**
- * @author Genesis
+ * @author Nelson
  */
 
 public class Hiscores {

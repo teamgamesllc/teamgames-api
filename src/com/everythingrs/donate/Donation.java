@@ -6,7 +6,7 @@ import com.everythingrs.lib.gson.*;
 import com.everythingrs.net.HTTPS;
 
 /**
- * @author Genesis
+ * @author Nelson
  */
 
 public class Donation {

@@ -12,7 +12,7 @@ import com.everythingrs.net.HTTPS;
 import com.everythingrs.net.Post;
 
 /**
- * @author Genesis
+ * @author Nelson
  */
 
 public class Vote {

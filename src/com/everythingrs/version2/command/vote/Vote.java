@@ -11,7 +11,7 @@ import com.everythingrs.version2.request.GET;
 import com.everythingrs.version2.request.Post;
 
 /**
- * @author Genesis
+ * @author Nelson
  */
 
 public class Vote extends TeamGamesRequest {

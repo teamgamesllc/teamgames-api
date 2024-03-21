@@ -6,7 +6,7 @@ import java.io.*;
 
 /**
  * Creates a serverSocket this way the server can accept API calls.
- * @author Genesis
+ * @author Nelson
  *
  */
 

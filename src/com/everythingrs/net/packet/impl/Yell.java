@@ -4,7 +4,7 @@ import com.everythingrs.net.packet.Packet;
 
 /**
  * Handles all yells from the ERS console API
- * @author Genesis
+ * @author Nelson
  *
  */
 

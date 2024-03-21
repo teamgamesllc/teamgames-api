@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author Genesis
+ * @author Nelson
  */
 public class Search {
 

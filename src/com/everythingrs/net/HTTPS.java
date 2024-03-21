@@ -7,7 +7,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * @author Genesis
+ * @author Nelson
  */
 
 
