@@ -6,10 +6,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.everythingrs.hiscores.Hiscores;
-import com.everythingrs.model.Model;
 import com.everythingrs.model.ers.*;
 import com.everythingrs.service.TickHandler;
+import com.teamgames.hiscores.Hiscores;
+import com.teamgames.model.Model;
 
 public class Service {
 

@@ -2,7 +2,7 @@ package com.everythingrs.net.packet.impl;
 
 import java.util.Map;
 
-import com.everythingrs.net.packet.Packet;
+import com.teamgames.net.packet.Packet;
 
 /**
  * Handles all offenses from the ERS api console

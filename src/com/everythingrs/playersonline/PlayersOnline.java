@@ -7,8 +7,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.everythingrs.lib.gson.Gson;
 import com.everythingrs.net.Post;
+import com.teamgames.lib.gson.Gson;
 
 /**
  * 

@@ -1,6 +1,6 @@
 package com.everythingrs.net.packet.impl;
 
-import com.everythingrs.net.packet.Packet;
+import com.teamgames.net.packet.Packet;
 
 public class GiveRank extends Packet {
 	

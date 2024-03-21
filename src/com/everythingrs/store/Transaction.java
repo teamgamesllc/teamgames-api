@@ -2,8 +2,8 @@ package com.everythingrs.store;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.everythingrs.lib.gson.*;
 import com.everythingrs.net.HTTPS;
+import com.teamgames.lib.gson.*;
 
 /**
  * @author Nelson

@@ -20,11 +20,11 @@ public class Main {
 		final String amount = "1";
 
 		for (int i = 0; i < 1000; i++) {
-			com.everythingrs.vote.Vote.service.execute(new Runnable() {
+			com.teamgames.vote.Vote.service.execute(new Runnable() {
 				@Override
 				public void run() {
 					try {
-						com.everythingrs.vote.Vote[] reward = com.everythingrs.vote.Vote.reward("PLACEHOLDER", playerName,
+						com.teamgames.vote.Vote[] reward = com.teamgames.vote.Vote.reward("PLACEHOLDER", playerName,
 								id, amount);
 						if (reward[0].message != null) {
 							System.out.println(reward[0].message);

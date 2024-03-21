@@ -1,6 +1,6 @@
 package com.everythingrs.net.packet.impl;
 
-import com.everythingrs.net.packet.Packet;
+import com.teamgames.net.packet.Packet;
 
 /**
  * Handles all yells from the ERS console API
