@@ -7,27 +7,27 @@ Store Command:
 if (playerCommand.equalsIgnoreCase("claim")) {
     CompletableFuture.supplyAsync(() -> {
         try {
-            return com.everythingrs.donate.Donation.donations("secret_key", c.playerName);
+            return com.everythingrs.store.Transaction.transactions("secret_key", c.playerName);
         } catch (Exception e) {
             c.sendMessage("API Services are currently offline. Please check back shortly.");
             e.printStackTrace();
             return null;
         }
-    }).thenAccept(donations -> {
-        if (donations == null) return;
+    }).thenAccept(transactions -> {
+        if (transactions == null) return;
 
-        if (donations.length == 0) {
-            c.sendMessage("You currently don't have any items waiting. You must donate first!");
+        if (transactions.length == 0) {
+            c.sendMessage("You currently don't have any items waiting. You must make a purchase first!");
             return;
         }
-        if (donations[0].message != null) {
-            c.sendMessage(donations[0].message);
+        if (transactions[0].message != null) {
+            c.sendMessage(transactions[0].message);
             return;
         }
-        for (com.everythingrs.donate.Donation donation : donations) {
-            c.getItems().addItem(donation.product_id, donation.product_amount);
+        for (com.everythingrs.store.Transaction transaction : transactions) {
+            c.getItems().addItem(transaction.product_id, transaction.product_amount);
         }
-        c.sendMessage("Thank you for donating!");
+        c.sendMessage("Thank you for supporting the server!");
     });
 }
 ```
