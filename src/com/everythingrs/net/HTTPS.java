@@ -1,9 +1,10 @@
-package com.everythingrs.service.call;
+package com.everythingrs.net;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * @author Genesis
@@ -11,7 +12,7 @@ import java.net.URL;
 
 
 
-public class HTTP {
+public class HTTPS {
 	
 	/**
 	 * @deprcated
@@ -24,7 +25,7 @@ public class HTTP {
 //        SSLUtilities.trustAllHttpsCertificates();
         connectionURL = connectionURL.replace(" ", "%20");
         URL url = new URL(connectionURL);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Host", "everythingrs.com");
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.2; rv:20.0) Gecko/20121202 Firefox/20.0");

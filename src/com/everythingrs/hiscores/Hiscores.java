@@ -1,8 +1,8 @@
 package com.everythingrs.hiscores;
 
 import com.everythingrs.model.ers.HiscoresModel;
-import com.everythingrs.service.call.HTTP;
-import com.everythingrs.service.call.Main;
+import com.everythingrs.net.HTTPS;
+import com.everythingrs.net.Main;
 
 /**
  * @author Genesis
@@ -60,7 +60,7 @@ public class Hiscores {
 		if (debugMessage)
 			System.out.println(builder.toString());
 		try {
-			final String response = HTTP.connection(builder.toString());
+			final String response = HTTPS.connection(builder.toString());
 			if (debugMessage == true && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
@@ -96,7 +96,7 @@ public class Hiscores {
 		if (debugMessage)
 			System.out.println(builder.toString());
 		try {
-			final String response = HTTP.connection(builder.toString());
+			final String response = HTTPS.connection(builder.toString());
 			if (debugMessage == true && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
@@ -131,7 +131,7 @@ public class Hiscores {
 		if (debugMessage)
 			System.out.println(builder.toString());
 		try {
-			final String response = HTTP.connection(builder.toString());
+			final String response = HTTPS.connection(builder.toString());
 			if (debugMessage == true && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}

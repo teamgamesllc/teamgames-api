@@ -7,9 +7,9 @@ import java.util.concurrent.Executors;
 
 import com.everythingrs.commands.Search;
 import com.everythingrs.donate.Donation;
-import com.everythingrs.service.call.HTTP;
-import com.everythingrs.service.call.Post;
 import com.everythingrs.lib.gson.Gson;
+import com.everythingrs.net.HTTPS;
+import com.everythingrs.net.Post;
 
 /**
  * @author Genesis
@@ -85,7 +85,7 @@ public class Vote {
 	 */
 
 	public static String validate(String secret, String playerName, int id) throws Exception {
-		return HTTP.connection("https://everythingrs.com/api/vote/process/" + playerName + "/" + secret + "/" + id);
+		return HTTPS.connection("https://everythingrs.com/api/vote/process/" + playerName + "/" + secret + "/" + id);
 	}
 	
 	public static String claimAuth(String secret, String username, String auth) throws Exception {

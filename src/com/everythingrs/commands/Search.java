@@ -1,7 +1,7 @@
 package com.everythingrs.commands;
 
-import com.everythingrs.service.call.Post;
 import com.everythingrs.lib.gson.Gson;
+import com.everythingrs.net.Post;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

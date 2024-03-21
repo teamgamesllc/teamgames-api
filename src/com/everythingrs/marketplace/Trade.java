@@ -12,8 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import com.everythingrs.service.call.Post;
 import com.everythingrs.lib.gson.Gson;
+import com.everythingrs.net.Post;
 
 /**
  * Handles trade data

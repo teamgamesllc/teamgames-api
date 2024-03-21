@@ -2,8 +2,8 @@ package com.everythingrs.donate;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.everythingrs.service.call.HTTP;
 import com.everythingrs.lib.gson.*;
+import com.everythingrs.net.HTTPS;
 
 /**
  * @author Genesis
@@ -32,7 +32,7 @@ public class Donation {
      */
 
     public static String validate(String secret, String playerName) throws Exception {
-        return HTTP.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
+        return HTTPS.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
     }
 
     /**
