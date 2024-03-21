@@ -14,7 +14,7 @@ if (playerCommand.equalsIgnoreCase("claim")) {
             return null;
         }
     }).thenAccept(donations -> {
-        if (donations == null) return; // Error case handled in supplyAsync
+        if (donations == null) return;
 
         if (donations.length == 0) {
             c.sendMessage("You currently don't have any items waiting. You must donate first!");
