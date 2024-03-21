@@ -47,8 +47,8 @@ public class Transaction {
     public static Transaction[] donations(String secret, String playerName) throws Exception {
         String test = Transaction.validate(secret, playerName);
         Gson gson = new Gson();
-        Transaction[] donations = gson.fromJson(test, Transaction[].class);
-        return donations;
+        Transaction[] transactions = gson.fromJson(test, Transaction[].class);
+        return transactions;
     }
 
 }
