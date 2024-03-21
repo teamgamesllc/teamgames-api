@@ -34,6 +34,10 @@ public class Transaction {
     public static String validate(String secret, String playerName) throws Exception {
         return HTTPS.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
     }
+    
+    public static String getTransaction(String secret, String playerName) throws Exception {
+        return HTTPS.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
+    }
 
     /**
      * Returns an array which contains all the players donated items. If the player has not donated
@@ -44,7 +48,7 @@ public class Transaction {
      * @throws Exception
      */
 
-    public static Transaction[] donations(String secret, String playerName) throws Exception {
+    public static Transaction[] getTransactions(String secret, String playerName) throws Exception {
         String test = Transaction.validate(secret, playerName);
         Gson gson = new Gson();
         Transaction[] transactions = gson.fromJson(test, Transaction[].class);
