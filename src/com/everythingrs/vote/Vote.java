@@ -6,10 +6,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.everythingrs.commands.Search;
-import com.everythingrs.donate.Donation;
 import com.everythingrs.lib.gson.Gson;
 import com.everythingrs.net.HTTPS;
 import com.everythingrs.net.Post;
+import com.everythingrs.store.Transaction;
 
 /**
  * @author Nelson

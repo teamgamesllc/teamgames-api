@@ -1,4 +1,4 @@
-package com.everythingrs.donate;
+package com.everythingrs.store;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,7 +9,7 @@ import com.everythingrs.net.HTTPS;
  * @author Nelson
  */
 
-public class Donation {
+public class Transaction {
 
     /**
      * These variables represent the JSON response that is sent from EverythingRS
@@ -44,10 +44,10 @@ public class Donation {
      * @throws Exception
      */
 
-    public static Donation[] donations(String secret, String playerName) throws Exception {
-        String test = Donation.validate(secret, playerName);
+    public static Transaction[] donations(String secret, String playerName) throws Exception {
+        String test = Transaction.validate(secret, playerName);
         Gson gson = new Gson();
-        Donation[] donations = gson.fromJson(test, Donation[].class);
+        Transaction[] donations = gson.fromJson(test, Transaction[].class);
         return donations;
     }
 
