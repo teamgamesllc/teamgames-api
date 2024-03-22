@@ -1,7 +1,5 @@
 package com.teamgames.tests.request;
 
-import java.util.concurrent.CompletableFuture;
-
 /**
  * @author Nelson A class that handles the "claim" command for players in a
  *         gaming server. This implementation includes rate limiting and request
@@ -41,7 +39,7 @@ public class TestStoreCommand {
 			}
 
 			// Asynchronously process the claim command to avoid blocking the main thread.
-			CompletableFuture.supplyAsync(() -> {
+			java.util.concurrent.CompletableFuture.supplyAsync(() -> {
 				try {
 					// Attempt to fetch transactions for the player from the store API.
 					return com.teamgames.store.Transaction.getTransactions("secret_key", playerName);
@@ -77,12 +75,12 @@ public class TestStoreCommand {
 							// details.
 //							c.getItems().addItem(transaction.product_id, transaction.product_amount);
 						}
-					}
+//					}
 
 					if (completedMessage != null) {
 						System.out.println(completedMessage);
 					}
-//				}
+				}
 			}).exceptionally(e -> {
 				// Handle any exceptions that occurred during the process and log them for
 				// debugging.
