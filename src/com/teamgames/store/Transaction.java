@@ -49,7 +49,7 @@ public class Transaction {
      */
 
     public static Transaction[] getTransactions(String secret, String playerName) throws Exception {
-        String test = Transaction.validate(secret, playerName);
+        String test = Transaction.validate(secret, playerName.toLowerCase().replace("_", " "));
         Gson gson = new Gson();
         Transaction[] transactions = gson.fromJson(test, Transaction[].class);
         return transactions;
