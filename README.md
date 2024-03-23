@@ -89,7 +89,6 @@ Store Command:
 				com.teamgames.util.RequestQueue.getRequestQueue().finishRequest(playerName);
 			});
 		}
-	}
 ```
 
 Vote Command:
