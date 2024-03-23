@@ -166,3 +166,21 @@ Vote Command:
 		    });
 		}
 ```
+
+Hiscore API (Soon to be deprecated)
+```
+CompletableFuture.runAsync(() -> {
+			try {
+				com.teamgames.leaderboard.Leaderboard.update("secret_key", "Normal Mode", playerName, playerRights,
+						playerXP, debugMessage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}, Executors.newSingleThreadExecutor()).whenComplete((result, throwable) -> {
+			if (throwable != null) {
+				System.err.println("An error occurred during the leaderboard update: " + throwable.getMessage());
+				throwable.printStackTrace();
+			}
+		});
+		
+```

@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.teamgames.hiscores.Hiscores;
+import com.teamgames.leaderboard.Leaderboard;
 import com.teamgames.model.Model;
 import com.teamgames.model.ers.*;
 import com.teamgames.service.TickHandler;
@@ -83,7 +83,7 @@ public class Service {
 				
 				HiscoresModel hiscores = (HiscoresModel) model;
 				
-				Hiscores.submitHiscores(model.getSecret(), hiscores.getGameMode(), hiscores.getPlayerName(),
+				Leaderboard.submitHiscores(model.getSecret(), hiscores.getGameMode(), hiscores.getPlayerName(),
 						hiscores.getRights(), hiscores.getPlayerXP(), hiscores.isDebugMessage());
 				
 				break;

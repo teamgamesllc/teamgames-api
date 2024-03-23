@@ -1,4 +1,4 @@
-package com.teamgames.hiscores;
+package com.teamgames.leaderboard;
 
 import com.teamgames.model.ers.HiscoresModel;
 import com.teamgames.net.HTTPS;
@@ -8,7 +8,7 @@ import com.teamgames.net.Main;
  * @author Nelson
  */
 
-public class Hiscores {
+public class Leaderboard {
 
 	/**
 	 * This method generates an EverythingRS URL based on the skills provided.
