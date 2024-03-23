@@ -175,7 +175,7 @@ CompletableFuture.runAsync(() -> {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}, Executors.newSingleThreadExecutor()).whenComplete((result, throwable) -> {
+		}, com.teamgames.util.Thread.executor).whenComplete((result, throwable) -> {
 			if (throwable != null) {
 				System.err.println("An error occurred during the leaderboard update: " + throwable.getMessage());
 				throwable.printStackTrace();
