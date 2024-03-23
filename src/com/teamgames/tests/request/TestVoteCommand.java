@@ -3,7 +3,7 @@ package com.teamgames.tests.request;
 public class TestVoteCommand {
 	
 	public static void main(String mainArgs[]) {
-		String playerCommand = "reward 123 1";
+		String playerCommand = "reward 123 1"; 
 		String playerName = "REPLACE_WITH_PLAYER_NAME"; // Example: c.getUsername(), c.playerName(), c.getDisplayName()
 
 		/**
