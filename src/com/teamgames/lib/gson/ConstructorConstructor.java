@@ -42,191 +42,234 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * Returns a function that can construct an instance of a requested type.
  */
 public final class ConstructorConstructor {
-  private final Map<Type, InstanceCreator<?>> instanceCreators;
+	private final Map<Type, InstanceCreator<?>> instanceCreators;
 
-  public ConstructorConstructor(Map<Type, InstanceCreator<?>> instanceCreators) {
-    this.instanceCreators = instanceCreators;
-  }
+	public ConstructorConstructor(Map<Type, InstanceCreator<?>> instanceCreators) {
+		this.instanceCreators = instanceCreators;
+	}
 
-  public <T> ObjectConstructor<T> get(TypeToken<T> typeToken) {
-    final Type type = typeToken.getType();
-    final Class<? super T> rawType = typeToken.getRawType();
+	/**
+	 * Returns a constructor function for the given type token.
+	 *
+	 * @param typeToken The type token representing the type.
+	 * @param <T>       The type of object to be constructed.
+	 * @return An object constructor for the given type token.
+	 */
 
-    // first try an instance creator
+	public <T> ObjectConstructor<T> get(TypeToken<T> typeToken) {
+		final Type type = typeToken.getType();
+		final Class<? super T> rawType = typeToken.getRawType();
 
-    @SuppressWarnings("unchecked") // types must agree
-    final InstanceCreator<T> typeCreator = (InstanceCreator<T>) instanceCreators.get(type);
-    if (typeCreator != null) {
-      return new ObjectConstructor<T>() {
-        @Override public T construct() {
-          return typeCreator.createInstance(type);
-        }
-      };
-    }
+		// first try an instance creator
 
-    // Next try raw type match for instance creators
-    @SuppressWarnings("unchecked") // types must agree
-    final InstanceCreator<T> rawTypeCreator =
-        (InstanceCreator<T>) instanceCreators.get(rawType);
-    if (rawTypeCreator != null) {
-      return new ObjectConstructor<T>() {
-        @Override public T construct() {
-          return rawTypeCreator.createInstance(type);
-        }
-      };
-    }
+		@SuppressWarnings("unchecked") // types must agree
+		final InstanceCreator<T> typeCreator = (InstanceCreator<T>) instanceCreators.get(type);
+		if (typeCreator != null) {
+			return new ObjectConstructor<T>() {
+				@Override
+				public T construct() {
+					return typeCreator.createInstance(type);
+				}
+			};
+		}
 
-    ObjectConstructor<T> defaultConstructor = newDefaultConstructor(rawType);
-    if (defaultConstructor != null) {
-      return defaultConstructor;
-    }
+		// Next try raw type match for instance creators
+		@SuppressWarnings("unchecked") // types must agree
+		final InstanceCreator<T> rawTypeCreator = (InstanceCreator<T>) instanceCreators.get(rawType);
+		if (rawTypeCreator != null) {
+			return new ObjectConstructor<T>() {
+				@Override
+				public T construct() {
+					return rawTypeCreator.createInstance(type);
+				}
+			};
+		}
 
-    ObjectConstructor<T> defaultImplementation = newDefaultImplementationConstructor(type, rawType);
-    if (defaultImplementation != null) {
-      return defaultImplementation;
-    }
+		ObjectConstructor<T> defaultConstructor = newDefaultConstructor(rawType);
+		if (defaultConstructor != null) {
+			return defaultConstructor;
+		}
 
-    // finally try unsafe
-    return newUnsafeAllocator(type, rawType);
-  }
+		ObjectConstructor<T> defaultImplementation = newDefaultImplementationConstructor(type, rawType);
+		if (defaultImplementation != null) {
+			return defaultImplementation;
+		}
 
-  private <T> ObjectConstructor<T> newDefaultConstructor(Class<? super T> rawType) {
-    try {
-      final Constructor<? super T> constructor = rawType.getDeclaredConstructor();
-      if (!constructor.isAccessible()) {
-        constructor.setAccessible(true);
-      }
-      return new ObjectConstructor<T>() {
-        @SuppressWarnings("unchecked") // T is the same raw type as is requested
-        @Override public T construct() {
-          try {
-            Object[] args = null;
-            return (T) constructor.newInstance(args);
-          } catch (InstantiationException e) {
-            // TODO: JsonParseException ?
-            throw new RuntimeException("Failed to invoke " + constructor + " with no args", e);
-          } catch (InvocationTargetException e) {
-            // TODO: don't wrap if cause is unchecked!
-            // TODO: JsonParseException ?
-            throw new RuntimeException("Failed to invoke " + constructor + " with no args",
-                e.getTargetException());
-          } catch (IllegalAccessException e) {
-            throw new AssertionError(e);
-          }
-        }
-      };
-    } catch (NoSuchMethodException e) {
-      return null;
-    }
-  }
+		// finally try unsafe
+		return newUnsafeAllocator(type, rawType);
+	}
 
-  /**
-   * Constructors for common interface types like Map and List and their
-   * subtypes.
-   */
-  @SuppressWarnings("unchecked") // use runtime checks to guarantee that 'T' is what it is
-  private <T> ObjectConstructor<T> newDefaultImplementationConstructor(
-      final Type type, Class<? super T> rawType) {
-    if (Collection.class.isAssignableFrom(rawType)) {
-      if (SortedSet.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new TreeSet<Object>();
-          }
-        };
-      } else if (EnumSet.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @SuppressWarnings("rawtypes")
-          @Override public T construct() {
-            if (type instanceof ParameterizedType) {
-              Type elementType = ((ParameterizedType) type).getActualTypeArguments()[0];
-              if (elementType instanceof Class) {
-                return (T) EnumSet.noneOf((Class)elementType);
-              } else {
-                throw new JsonIOException("Invalid EnumSet type: " + type.toString());
-              }
-            } else {
-              throw new JsonIOException("Invalid EnumSet type: " + type.toString());
-            }
-          }
-        };
-      } else if (Set.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new LinkedHashSet<Object>();
-          }
-        };
-      } else if (Queue.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new LinkedList<Object>();
-          }
-        };
-      } else {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new ArrayList<Object>();
-          }
-        };
-      }
-    }
+	/**
+	 * Creates a new default constructor for the given raw type.
+	 *
+	 * @param rawType The raw type for which to create a constructor.
+	 * @param <T>     The type of object to be constructed.
+	 * @return An object constructor for the given raw type, or null if no
+	 *         constructor is found.
+	 */
+	private <T> ObjectConstructor<T> newDefaultConstructor(Class<? super T> rawType) {
+		try {
+			final Constructor<? super T> constructor = rawType.getDeclaredConstructor();
+			if (!constructor.canAccess(null)) {
+				constructor.setAccessible(true);
+			}
+			return new ObjectConstructor<T>() {
+				@SuppressWarnings("unchecked") // T is the same raw type as is requested
+				@Override
+				public T construct() {
+					try {
+						Object[] args = null;
+						return (T) constructor.newInstance(args);
+					} catch (InstantiationException e) {
+						// TODO: JsonParseException ?
+						throw new RuntimeException("Failed to invoke " + constructor + " with no args", e);
+					} catch (InvocationTargetException e) {
+						// TODO: don't wrap if cause is unchecked!
+						// TODO: JsonParseException ?
+						throw new RuntimeException("Failed to invoke " + constructor + " with no args",
+								e.getTargetException());
+					} catch (IllegalAccessException e) {
+						throw new AssertionError(e);
+					}
+				}
+			};
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
+	}
 
-    if (Map.class.isAssignableFrom(rawType)) {
-      if (ConcurrentNavigableMap.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new ConcurrentSkipListMap<Object, Object>();
-          }
-        };
-      } else if (ConcurrentMap.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new ConcurrentHashMap<Object, Object>();
-          }
-        };
-      } else if (SortedMap.class.isAssignableFrom(rawType)) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new TreeMap<Object, Object>();
-          }
-        };
-      } else if (type instanceof ParameterizedType && !(String.class.isAssignableFrom(
-          TypeToken.get(((ParameterizedType) type).getActualTypeArguments()[0]).getRawType()))) {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new LinkedHashMap<Object, Object>();
-          }
-        };
-      } else {
-        return new ObjectConstructor<T>() {
-          @Override public T construct() {
-            return (T) new LinkedTreeMap<String, Object>();
-          }
-        };
-      }
-    }
+	/**
+	 * Creates a new default implementation constructor for the given type and raw
+	 * type.
+	 *
+	 * @param type    The type for which to create a constructor.
+	 * @param rawType The raw type for which to create a constructor.
+	 * @param <T>     The type of object to be constructed.
+	 * @return An object constructor for the given type and raw type, or null if no
+	 *         constructor is found.
+	 */
+	@SuppressWarnings("unchecked") // use runtime checks to guarantee that 'T' is what it is
+	private <T> ObjectConstructor<T> newDefaultImplementationConstructor(final Type type, Class<? super T> rawType) {
+		if (Collection.class.isAssignableFrom(rawType)) {
+			if (SortedSet.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new TreeSet<Object>();
+					}
+				};
+			} else if (EnumSet.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@SuppressWarnings("rawtypes")
+					@Override
+					public T construct() {
+						if (type instanceof ParameterizedType) {
+							Type elementType = ((ParameterizedType) type).getActualTypeArguments()[0];
+							if (elementType instanceof Class) {
+								return (T) EnumSet.noneOf((Class) elementType);
+							} else {
+								throw new JsonIOException("Invalid EnumSet type: " + type.toString());
+							}
+						} else {
+							throw new JsonIOException("Invalid EnumSet type: " + type.toString());
+						}
+					}
+				};
+			} else if (Set.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new LinkedHashSet<Object>();
+					}
+				};
+			} else if (Queue.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new LinkedList<Object>();
+					}
+				};
+			} else {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new ArrayList<Object>();
+					}
+				};
+			}
+		}
 
-    return null;
-  }
+		if (Map.class.isAssignableFrom(rawType)) {
+			if (ConcurrentNavigableMap.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new ConcurrentSkipListMap<Object, Object>();
+					}
+				};
+			} else if (ConcurrentMap.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new ConcurrentHashMap<Object, Object>();
+					}
+				};
+			} else if (SortedMap.class.isAssignableFrom(rawType)) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new TreeMap<Object, Object>();
+					}
+				};
+			} else if (type instanceof ParameterizedType && !(String.class.isAssignableFrom(
+					TypeToken.get(((ParameterizedType) type).getActualTypeArguments()[0]).getRawType()))) {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new LinkedHashMap<Object, Object>();
+					}
+				};
+			} else {
+				return new ObjectConstructor<T>() {
+					@Override
+					public T construct() {
+						return (T) new LinkedTreeMap<String, Object>();
+					}
+				};
+			}
+		}
 
-  private <T> ObjectConstructor<T> newUnsafeAllocator(
-      final Type type, final Class<? super T> rawType) {
-    return new ObjectConstructor<T>() {
-      private final UnsafeAllocator unsafeAllocator = UnsafeAllocator.create();
-      @SuppressWarnings("unchecked")
-      @Override public T construct() {
-        try {
-          Object newInstance = unsafeAllocator.newInstance(rawType);
-          return (T) newInstance;
-        } catch (Exception e) {
-          throw new RuntimeException(("Unable to invoke no-args constructor for " + type + ". "
-              + "Register an InstanceCreator with Gson for this type may fix this problem."), e);
-        }
-      }
-    };
-  }
+		return null;
+	}
 
-  @Override public String toString() {
-    return instanceCreators.toString();
-  }
+	/**
+	 * Creates a new unsafe allocator for the given type and raw type.
+	 *
+	 * @param type    The type for which to create an unsafe allocator.
+	 * @param rawType The raw type for which to create an unsafe allocator.
+	 * @param <T>     The type of object to be constructed.
+	 * @return An object constructor for the given type and raw type.
+	 */
+	private <T> ObjectConstructor<T> newUnsafeAllocator(final Type type, final Class<? super T> rawType) {
+		return new ObjectConstructor<T>() {
+			private final UnsafeAllocator unsafeAllocator = UnsafeAllocator.create();
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public T construct() {
+				try {
+					Object newInstance = unsafeAllocator.newInstance(rawType);
+					return (T) newInstance;
+				} catch (Exception e) {
+					throw new RuntimeException(("Unable to invoke no-args constructor for " + type + ". "
+							+ "Register an InstanceCreator with Gson for this type may fix this problem."), e);
+				}
+			}
+		};
+	}
+
+	@Override
+	public String toString() {
+		return instanceCreators.toString();
+	}
 }
