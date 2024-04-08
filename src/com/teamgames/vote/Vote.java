@@ -5,11 +5,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.teamgames.commands.Search;
 import com.teamgames.lib.gson.Gson;
 import com.teamgames.net.HTTPS;
 import com.teamgames.net.Post;
-import com.teamgames.store.Transaction;
 
 /**
  * @author Nelson
