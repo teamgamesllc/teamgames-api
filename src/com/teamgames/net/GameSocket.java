@@ -19,7 +19,7 @@ public class GameSocket extends Thread {
 
 	public static HashMap<String, String> queue = new HashMap<>();
 
-	private ServerSocket serverSocket;
+	protected ServerSocket serverSocket;
 
 	/**
 	 * Our socket constructor

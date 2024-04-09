@@ -25,6 +25,7 @@ public class Post {
 	 * @throws Exception
 	 */
 
+
 	public static String sendPostData(Map<String, Object> params, String location) throws Exception {
 //		SSLUtilities.trustAllHostnames();
 //		SSLUtilities.trustAllHttpsCertificates();
@@ -35,7 +36,7 @@ public class Post {
 		URL url = new URL(target);
 		StringBuilder postData = new StringBuilder();
 		for (Map.Entry<String, Object> param : params.entrySet()) {
-			if (postData.length() != 0)
+			if (!postData.isEmpty())
 				postData.append('&');
 			postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
 			postData.append('=');

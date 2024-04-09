@@ -23,7 +23,7 @@ public class Trade {
 
 	public String hash;
 
-	private Stack<Item> stack = new Stack<Item>();
+	protected Stack<Item> stack = new Stack<Item>();
 
 	private boolean state;
 
@@ -32,8 +32,8 @@ public class Trade {
 		boolean debug;
 	}
 
-	private static ConcurrentHashMap<String, Stack<Item>> map = new ConcurrentHashMap<String, Stack<Item>>();
-	private static ExecutorService service = Executors.newCachedThreadPool();
+	protected static ConcurrentHashMap<String, Stack<Item>> map = new ConcurrentHashMap<String, Stack<Item>>();
+	protected static ExecutorService service = Executors.newCachedThreadPool();
 
 	/**
 	 * Updates the marketplace API with the current trades
