@@ -6,7 +6,7 @@ public class TickHandler implements Runnable {
 	 * This is the parent / service that we will communicate with
 	 */
 	
-	private Service service;
+	protected Service service;
 	
 	/**
 	 * Constructor for our TickHandler.

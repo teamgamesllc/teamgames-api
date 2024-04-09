@@ -13,7 +13,7 @@ public class Main {
 		Main.websiteService.start();
 	}
 
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws Exception {
 		System.out.println("...");
 		final String playerName = "Test";
 		final String id = "1";
