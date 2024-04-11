@@ -36,7 +36,7 @@ public class Post {
 		URL url = new URL(target);
 		StringBuilder postData = new StringBuilder();
 		for (Map.Entry<String, Object> param : params.entrySet()) {
-			if (!postData.isEmpty())
+			if (postData.length() != 0)
 				postData.append('&');
 			postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
 			postData.append('=');

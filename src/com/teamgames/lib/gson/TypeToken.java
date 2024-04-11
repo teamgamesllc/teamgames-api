@@ -122,10 +122,10 @@ public class TypeToken<T> {
     if (type.equals(from)) return true;
     if (type instanceof Class<?>) {
       return rawType.isAssignableFrom($Gson$Types.getRawType(from));
-    } else if (type instanceof ParameterizedType parameterizedType) {
-      return isAssignableFrom(from, parameterizedType, new HashMap<>());
-    } else if (type instanceof GenericArrayType genericArrayType) {
-      return rawType.isAssignableFrom($Gson$Types.getRawType(from)) && isAssignableFrom(from, genericArrayType);
+    } else if (type instanceof ParameterizedType) {
+      return isAssignableFrom(from, (ParameterizedType) type, new HashMap<>());
+    } else if (type instanceof GenericArrayType) {
+      return rawType.isAssignableFrom($Gson$Types.getRawType(from)) && isAssignableFrom(from, (GenericArrayType)type);
     } else {
       throw buildUnexpectedTypeError(type, Class.class, ParameterizedType.class, GenericArrayType.class);
     }
@@ -150,9 +150,10 @@ public class TypeToken<T> {
     Type toGenericComponentType = to.getGenericComponentType();
     if (toGenericComponentType instanceof ParameterizedType) {
       Type t = from;
-      if (from instanceof GenericArrayType genericArray) {
-        t = genericArray.getGenericComponentType();
-      } else if (from instanceof Class<?> classType) {
+      if (from instanceof GenericArrayType) {
+        t = ((GenericArrayType)from).getGenericComponentType();
+      } else if (from instanceof Class<?>) {
+    	  Class<?> classType = (Class<?>) from;
         while (classType.isArray()) {
           classType = classType.getComponentType();
         }
@@ -181,8 +182,8 @@ public class TypeToken<T> {
     // First figure out the class and any type information.
     Class<?> clazz = $Gson$Types.getRawType(from);
     ParameterizedType ptype = null;
-    if (from instanceof ParameterizedType parameterizedType) {
-      ptype = parameterizedType;
+    if (from instanceof ParameterizedType) {
+      ptype = (ParameterizedType)from;
     }
 
     // Load up parameterized variable info if it was parameterized.
@@ -192,8 +193,8 @@ public class TypeToken<T> {
       for (int i = 0; i < tArgs.length; i++) {
         Type arg = tArgs[i];
         TypeVariable<?> var = tParams[i];
-        while (arg instanceof TypeVariable<?> v) {
-          arg = typeVarMap.get(v.getName());
+        while (arg instanceof TypeVariable<?>) {
+          arg = typeVarMap.get(((TypeVariable<?>)arg).getName());
         }
         typeVarMap.put(var.getName(), arg);
       }

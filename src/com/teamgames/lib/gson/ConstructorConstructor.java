@@ -110,7 +110,7 @@ public final class ConstructorConstructor {
 	private <T> ObjectConstructor<T> newDefaultConstructor(Class<? super T> rawType) {
 		try {
 			final Constructor<? super T> constructor = rawType.getDeclaredConstructor();
-			if (!constructor.canAccess(null)) {
+			if (!constructor.isAccessible()) {
 				constructor.setAccessible(true);
 			}
 			return new ObjectConstructor<T>() {
