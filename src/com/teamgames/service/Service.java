@@ -77,17 +77,17 @@ public class Service {
 		for (int i = 0; i < updatesPerCycle; i++) {
 
 			Model model = this.queue.poll();
-
+			// Should be moved to if statements for simplicity
 			switch (model.getName()) {
 			case "updateHiscores":
-				
+				// Should be renamed to follow conventions?
 				HiscoresModel hiscores = (HiscoresModel) model;
-				
+
 				Leaderboard.submitHiscores(model.getSecret(), hiscores.getGameMode(), hiscores.getPlayerName(),
 						hiscores.getRights(), hiscores.getPlayerXP(), hiscores.isDebugMessage());
-				
+
 				break;
-				
+
 			}
 
 		}

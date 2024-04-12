@@ -24,7 +24,6 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * This type adapter supports three subclasses of date: Date, Timestamp, and

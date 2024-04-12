@@ -1,7 +1,5 @@
 package com.teamgames.net.packet.impl;
 
-import java.util.Map;
-
 import com.teamgames.net.packet.Packet;
 
 /**

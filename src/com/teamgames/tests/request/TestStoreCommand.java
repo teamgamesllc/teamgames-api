@@ -70,11 +70,11 @@ public class TestStoreCommand {
 //				synchronized (c) {
 					if (processTransaction) {
 						// Add the purchased items to the player's inventory.
-						for (com.teamgames.store.Transaction transaction : transactions) {
+					//	for (com.teamgames.store.Transaction transaction : transactions) {
 							// Items would be added to the player's inventory here based on the transaction
 							// details.
 //							c.getItems().addItem(transaction.product_id, transaction.product_amount);
-						}
+						//}
 //					}
 
 					if (completedMessage != null) {

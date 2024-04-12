@@ -1,8 +1,6 @@
 package com.teamgames.leaderboard;
 
-import com.teamgames.model.ers.HiscoresModel;
 import com.teamgames.net.HTTPS;
-import com.teamgames.net.Main;
 
 /**
  * @author Nelson
@@ -61,7 +59,7 @@ public class Leaderboard {
 			System.out.println(builder.toString());
 		try {
 			final String response = HTTPS.connection(builder.toString());
-			if (debugMessage == true && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
+			if (debugMessage && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
 		} catch (Exception e) {
@@ -97,7 +95,7 @@ public class Leaderboard {
 			System.out.println(builder.toString());
 		try {
 			final String response = HTTPS.connection(builder.toString());
-			if (debugMessage == true && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
+			if (debugMessage && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
 		} catch (Exception e) {
@@ -132,7 +130,7 @@ public class Leaderboard {
 			System.out.println(builder.toString());
 		try {
 			final String response = HTTPS.connection(builder.toString());
-			if (debugMessage == true && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
+			if (debugMessage && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
 		} catch (Exception e) {
@@ -184,7 +182,7 @@ public class Leaderboard {
 	private static double addSummoning(int[] playerXP) {
 		try {
 			return (getLevelForXP(playerXP[23])) * 0.125;
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 
 		}
 		return 0;

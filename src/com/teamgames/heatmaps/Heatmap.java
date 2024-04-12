@@ -8,42 +8,43 @@ import com.teamgames.lib.gson.Gson;
 import com.teamgames.net.Post;
 
 public class Heatmap {
-	
+
 	private static ConcurrentHashMap<String, Heatmap> map = new ConcurrentHashMap<String, Heatmap>();
-	
+
 	/**
 	 * Getter for the map, which will then be passed to the API
+	 * 
 	 * @return
 	 */
-	
+
 	public static ConcurrentHashMap<String, Heatmap> getMap() {
 		return map;
 	}
 
-	private String username;
-	private int positionX;
-	private int positionY;
-	private int positionZ;
-	private String message;
-	
+	protected String username;
+	protected int positionX;
+	protected int positionY;
+	protected int positionZ;
+	protected String message;
+
 	/**
 	 * @param username The player's username
-	 * @param x The player's position on the x axis
-	 * @param y The player's position on the y axis
-	 * @param z The player's height
+	 * @param x        The player's position on the x axis
+	 * @param y        The player's position on the y axis
+	 * @param z        The player's height
 	 */
-	
+
 	public Heatmap(String username, int x, int y, int z) {
 		this.username = username;
 		this.positionX = x;
 		this.positionY = y;
 		this.positionZ = z;
 	}
-	
+
 	/**
 	 * Updates the heatmaps
 	 */
-	
+
 	public static void update(String secret) {
 		try {
 			Map<String, Object> params = new LinkedHashMap<>();
@@ -54,7 +55,5 @@ public class Heatmap {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }
