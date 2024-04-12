@@ -3,7 +3,6 @@ package com.teamgames.tests.request;
 import com.teamgames.util.RateLimiter;
 import com.teamgames.util.RequestQueue;
 import com.teamgames.util.Thread;
-import com.teamgames.vote.RewardService;
 import com.teamgames.vote.Vote;
 
 import java.util.concurrent.CompletableFuture;
@@ -48,12 +47,10 @@ public class TestVoteCommand {
 				String completedMessage;
 				final int itemIds = rewards[0].reward_id;
 				final int rewardAmount = rewards[0].reward_amount;
-				RewardService rewardService = rewards[0].rewardService;
 				int votePoints = 0;
 				for (Vote reward : rewards) {
 					if (reward == null) continue;
 					if (reward.message == null) {
-						rewardService.rewards.put(itemIds, rewardAmount);
 						votePoints += reward.vote_points;
 					}
 				}

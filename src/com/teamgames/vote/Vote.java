@@ -22,8 +22,6 @@ public class Vote {
 
     public static final ExecutorService service = Executors.newFixedThreadPool(1);
 
-    public final RewardService rewardService = new RewardService(new LinkedHashMap<>());
-
     /**
      * These variables represent the JSON response that is sent from EverythingRS
      */
