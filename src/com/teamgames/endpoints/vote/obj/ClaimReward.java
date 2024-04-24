@@ -2,7 +2,7 @@ package com.teamgames.endpoints.vote.obj;
 
 /**
  * @author Nelson Sanchez
- * Represents the details of a reward claimed by a player through the EverythingRS Vote API.
+ * Represents the details of a reward claimed by a player through the TeamGames Vote API.
  * This class is used to hold the data retrieved from the API response after a player claims a reward.
  */
 public class ClaimReward {
