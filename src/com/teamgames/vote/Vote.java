@@ -1,9 +1,9 @@
 package com.teamgames.vote;
 
+import com.teamgames.https.Get;
+import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;
 import com.teamgames.lib.gson.TypeToken;
-import com.teamgames.net.HTTPS;
-import com.teamgames.net.Post;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -83,18 +83,7 @@ public class Vote {
      */
 
     public static String validate(String secret, String playerName, int id) throws Exception {
-        return HTTPS.connection("https://everythingrs.com/api/vote/process/" + playerName + "/" + secret + "/" + id);
-    }
-
-    public static String claimAuth(String secret, String username, String auth) throws Exception {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("username", username);
-        params.put("auth", auth);
-        params.put("secret", secret);
-        final String response = Post.sendPostData(params, "api/vote/claim-auth");
-        System.out.println("response: " + response);
-        Auth[] authResponse = new Gson().fromJson(response, Auth[].class);
-        return authResponse[0].message;
+        return Get.connection("https://everythingrs.com/api/vote/process/" + playerName + "/" + secret + "/" + id);
     }
 
 }

@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;
-import com.teamgames.net.Post;
 
 public class Heatmap {
 

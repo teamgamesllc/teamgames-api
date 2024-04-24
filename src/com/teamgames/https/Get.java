@@ -1,4 +1,4 @@
-package com.teamgames.net;
+package com.teamgames.https;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +12,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 
-public class HTTPS {
+public class Get {
 	
 	/**
 	 * @deprcated

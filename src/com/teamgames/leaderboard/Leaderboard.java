@@ -1,6 +1,6 @@
 package com.teamgames.leaderboard;
 
-import com.teamgames.net.HTTPS;
+import com.teamgames.https.Get;
 
 /**
  * @author Nelson
@@ -58,7 +58,7 @@ public class Leaderboard {
 		if (debugMessage)
 			System.out.println(builder.toString());
 		try {
-			final String response = HTTPS.connection(builder.toString());
+			final String response = Get.connection(builder.toString());
 			if (debugMessage && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
@@ -94,7 +94,7 @@ public class Leaderboard {
 		if (debugMessage)
 			System.out.println(builder.toString());
 		try {
-			final String response = HTTPS.connection(builder.toString());
+			final String response = Get.connection(builder.toString());
 			if (debugMessage && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}
@@ -129,7 +129,7 @@ public class Leaderboard {
 		if (debugMessage)
 			System.out.println(builder.toString());
 		try {
-			final String response = HTTPS.connection(builder.toString());
+			final String response = Get.connection(builder.toString());
 			if (debugMessage && response.equalsIgnoreCase("Sucessfully added record to Hiscores")) {
 				System.out.println("Successfully added record for " + playerName + " on the hiscores api.");
 			}

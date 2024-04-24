@@ -1,7 +1,7 @@
 package com.teamgames.store;
 
+import com.teamgames.https.Get;
 import com.teamgames.lib.gson.Gson;
-import com.teamgames.net.HTTPS;
 
 /**
  * @author Nelson
@@ -32,11 +32,11 @@ public class Transaction {
 	 */
 
 	public static String validate(String secret, String playerName) throws Exception {
-		return HTTPS.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
+		return Get.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
 	}
 
 	public static String getTransaction(String secret, String playerName) throws Exception {
-		return HTTPS.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
+		return Get.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
 	}
 
 	/**

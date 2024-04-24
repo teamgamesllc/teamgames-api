@@ -6,8 +6,9 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;
-import com.teamgames.net.Post;
 
 /**
  * Handles trade data

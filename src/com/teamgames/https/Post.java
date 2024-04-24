@@ -1,4 +1,4 @@
-package com.teamgames.net;
+package com.teamgames.https;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
