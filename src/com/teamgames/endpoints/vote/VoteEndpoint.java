@@ -22,7 +22,7 @@ public class VoteEndpoint {
      * Retrieves a {@link ClaimReward} object representing the reward for a player.
      * This method calls the TeamGames Vote API to validate the player's vote and claim the designated reward.
      * 
-     * @param secret      The secret key for authentication with the TeamGames Vote API.
+     * @param apiKey      The secret key for authentication with the TeamGames Vote API.
      * @param playerName  The name of the player claiming the reward.
      * @param id          The identifier of the specific reward to claim.
      * @param amount      The amount of the reward to be claimed, usually determined by vote points or similar metrics.
@@ -30,9 +30,9 @@ public class VoteEndpoint {
      * @throws Exception  If there is an error in the HTTP post request or during the parsing of the response.
      *                    This could be due to network issues, incorrect parameters, or server-side errors.
      */
-    public static ClaimReward getReward(String secret, String playerName, String id, String amount) throws Exception {
+    public static ClaimReward getReward(String apiKey, String playerName, String id, String amount) throws Exception {
         Map<String, Object> params = new LinkedHashMap<>();
-        params.put("secret", secret);
+        params.put("secret", apiKey);
         params.put("player", playerName);
         params.put("reward", id);
         params.put("amount", amount);
