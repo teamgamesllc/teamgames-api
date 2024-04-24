@@ -1,4 +1,4 @@
-package com.teamgames.heatmaps;
+package com.teamgames.endpoints.heatmap;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

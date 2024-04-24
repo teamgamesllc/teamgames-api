@@ -42,7 +42,7 @@ public class TestStoreCommand {
 			java.util.concurrent.CompletableFuture.supplyAsync(() -> {
 				try {
 					// Attempt to fetch transactions for the player from the store API.
-					return com.teamgames.store.Transaction.getTransactions("secret_key", playerName);
+					return com.teamgames.endpoints.store.Transaction.getTransactions("secret_key", playerName);
 				} catch (Exception e) {
 					// Handle exceptions by notifying the player and logging the error for
 					// investigation.

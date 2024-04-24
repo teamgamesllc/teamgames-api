@@ -1,4 +1,4 @@
-package com.teamgames.playersonline;
+package com.teamgames.endpoints.playersonline;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

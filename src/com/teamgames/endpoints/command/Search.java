@@ -1,4 +1,4 @@
-package com.teamgames.commands;
+package com.teamgames.endpoints.command;
 
 import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;

@@ -1,4 +1,4 @@
-package com.teamgames.store;
+package com.teamgames.endpoints.store;
 
 import com.teamgames.https.Get;
 import com.teamgames.lib.gson.Gson;

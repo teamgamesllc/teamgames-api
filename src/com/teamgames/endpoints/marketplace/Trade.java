@@ -1,4 +1,4 @@
-package com.teamgames.marketplace;
+package com.teamgames.endpoints.marketplace;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

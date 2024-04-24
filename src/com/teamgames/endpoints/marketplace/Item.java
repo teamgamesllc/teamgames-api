@@ -1,4 +1,4 @@
-package com.teamgames.marketplace;
+package com.teamgames.endpoints.marketplace;
 
 import java.util.Date;
 import java.text.DateFormat;

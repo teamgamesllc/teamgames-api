@@ -1,4 +1,4 @@
-package com.teamgames.leaderboard;
+package com.teamgames.endpoints.leaderboard;
 
 import com.teamgames.https.Get;
 
