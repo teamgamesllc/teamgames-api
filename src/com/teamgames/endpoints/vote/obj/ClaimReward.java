@@ -1,37 +1,107 @@
 package com.teamgames.endpoints.vote.obj;
 
+import com.teamgames.lib.gson.SerializedName;
+
 /**
- * @author Nelson Sanchez
  * Represents the details of a reward claimed by a player through the TeamGames Vote API.
- * This class is used to hold the data retrieved from the API response after a player claims a reward.
+ * This class is designed to be thread-safe to allow concurrent access to the reward details.
  */
 public class ClaimReward {
+    private final String username; // Immutable field does not need synchronization
+    private volatile int rewardAmount;
 
-    /** The total number of votes the player has made. */
-    public String total_votes;
+    @SerializedName("message")
+    public volatile String message;
+    
+    @SerializedName("total_points")
+    public volatile String totalVotes; 
+    @SerializedName("vote_points")
+    public volatile int votePoints;
+    @SerializedName("votes_month")
+    public volatile int votesMonth;
+    @SerializedName("give_amount")
+    public volatile int giveAmount;
+    @SerializedName("reward_id")
+    public volatile int rewardId;
+    @SerializedName("reward_name")
+    public volatile String rewardName; 
 
-    /** The number of vote points the player has, which can be used to claim rewards. */
-    public int vote_points;
+    // Constructor
+    public ClaimReward(String username, String rewardName) {
+        this.username = username;
+        this.rewardName = rewardName;
+    }
 
-    /** The number of votes the player has made in the current month. */
-    public int votes_month;
+    // Thread-safe getter and setter for totalVotes
+    public synchronized String getTotalVotes() {
+        return totalVotes;
+    }
 
-    /** The username of the player who is claiming the reward. */
-    public String username;
+    public synchronized void setTotalVotes(String totalVotes) {
+        this.totalVotes = totalVotes;
+    }
 
-    /** The amount of the reward given to the player. */
-    public int give_amount;
+    // Thread-safe getter and setter for votePoints
+    public synchronized int getVotePoints() {
+        return votePoints;
+    }
 
-    /** The unique identifier of the reward. */
-    public int reward_id;
+    public synchronized void setVotePoints(int votePoints) {
+        this.votePoints = votePoints;
+    }
 
-    /** The name of the reward. */
-    public String reward_name;
+    // Thread-safe getter and setter for votesMonth
+    public synchronized int getVotesMonth() {
+        return votesMonth;
+    }
 
-    /** The amount of the specific reward type to be given. */
-    public int reward_amount;
+    public synchronized void setVotesMonth(int votesMonth) {
+        this.votesMonth = votesMonth;
+    }
 
-    /** A message associated with the reward, for example a reason if the request was rejected. */
-    public String message;
+    // Immutable getter for username
+    public String getUsername() {
+        return username;
+    }
 
+    // Thread-safe getter and setter for giveAmount
+    public synchronized int getGiveAmount() {
+        return giveAmount;
+    }
+
+    public synchronized void setGiveAmount(int giveAmount) {
+        this.giveAmount = giveAmount;
+    }
+
+    // Thread-safe getter and setter for rewardId
+    public synchronized int getRewardId() {
+        return rewardId;
+    }
+
+    public synchronized void setRewardId(int rewardId) {
+        this.rewardId = rewardId;
+    }
+
+    // Immutable getter for rewardName
+    public String getRewardName() {
+        return rewardName;
+    }
+
+    // Thread-safe getter and setter for rewardAmount
+    public synchronized int getRewardAmount() {
+        return rewardAmount;
+    }
+
+    public synchronized void setRewardAmount(int rewardAmount) {
+        this.rewardAmount = rewardAmount;
+    }
+
+    // Thread-safe getter and setter for message
+    public synchronized String getMessage() {
+        return message;
+    }
+
+    public synchronized void setMessage(String message) {
+        this.message = message;
+    }
 }

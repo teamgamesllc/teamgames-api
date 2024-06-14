@@ -72,7 +72,7 @@ public class Trade {
 
 					params.put("searchIndex", searchIndex.toString());
 					try {
-						Post.sendPostData(params, "api/marketplace/update");
+						Post.sendPostData(params, "api/marketplace/update", secret);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

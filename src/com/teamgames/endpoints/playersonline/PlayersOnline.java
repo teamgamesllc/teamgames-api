@@ -66,7 +66,7 @@ public class PlayersOnline {
 			Map<String, Object> params = new LinkedHashMap<>();
 			params.put("secret", secret);
 			params.put("count", count);
-			final String req = Post.sendPostData(params, "api/playersonline/update");
+			final String req = Post.sendPostData(params, "api/playersonline/update", secret);
 			if (debug)
 				System.out.println(new Gson().fromJson(req, PlayersOnline.class).message);
 		} catch (Exception e) {

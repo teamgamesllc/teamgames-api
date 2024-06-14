@@ -1,6 +1,9 @@
 package com.teamgames.endpoints.store;
 
-import com.teamgames.https.Get;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;
 
 /**
@@ -8,6 +11,8 @@ import com.teamgames.lib.gson.Gson;
  */
 
 public class Transaction {
+	
+	private final static String ENDPOINT_URL = "api/v3/store/transaction/update";
 
 	/**
 	 * These variables represent the JSON response that is sent from EverythingRS
@@ -20,28 +25,28 @@ public class Transaction {
 	public String product_name;
 	public double product_price;
 	public String message;
-
-	/**
-	 * Fetches whether or not the player has already purchased an item through the
-	 * on EverythingRS.com API After the player it fetches the result, our backend
-	 * will remove it.
-	 * 
-	 * @param secret
-	 * @param playerName
-	 * @throws Exception
-	 */
-
-	public static String validate(String secret, String playerName) throws Exception {
-		return Get.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
+	private String apiKey;
+    private String playerName;
+	
+	public Transaction() {
+		
 	}
 
-	public static String getTransaction(String secret, String playerName) throws Exception {
-		return Get.connection("https://ersdev.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
-	}
+    // Method for setting game mode
+    public Transaction setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+        return this;
+    }
 
-	/**
+    // Method for setting player name
+    public Transaction setPlayerName(String playerName) {
+        this.playerName = playerName;
+        return this;
+    }
+
+    /**
 	 * Returns an array which contains all the players donated items. If the player
-	 * has not donated or has already claimed their items, the array will be empty.
+	 * has not made a purchase or has already claimed their items, the array will be empty.
 	 * 
 	 * @param secret
 	 * @param playerName
@@ -49,11 +54,14 @@ public class Transaction {
 	 * @throws Exception
 	 */
 
-	public static Transaction[] getTransactions(String secret, String playerName) throws Exception {
-		String test = Transaction.validate(secret, playerName.toLowerCase().replace("_", " "));
-		Gson gson = new Gson();
-		Transaction[] transactions = gson.fromJson(test, Transaction[].class);
-		return transactions;
+	public Transaction[] getTransactions() throws Exception {
+		Map<String, Object> params = new LinkedHashMap<>();
+        params.put("playerName", playerName);
+        Gson gson = new Gson();
+        String endpoint = ENDPOINT_URL;
+        String request = Post.sendPostData(params, endpoint, apiKey);
+        Transaction[] transactions = gson.fromJson(request, Transaction[].class);
+        return transactions;
+//		return Get.connection("https://api.teamgames.io.everythingrs.com/api/donate/process/" + playerName + "/" + secret);
 	}
-
 }

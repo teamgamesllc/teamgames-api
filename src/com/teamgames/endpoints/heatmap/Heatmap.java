@@ -50,7 +50,7 @@ public class Heatmap {
 			Map<String, Object> params = new LinkedHashMap<>();
 			params.put("secret", secret);
 			params.put("heatmap", new Gson().toJson(getMap()));
-			Post.sendPostData(params, "api/heatmaps/update");
+			Post.sendPostData(params, "api/heatmaps/update", secret);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

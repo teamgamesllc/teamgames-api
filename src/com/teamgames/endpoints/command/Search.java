@@ -20,7 +20,7 @@ public class Search {
         params.put("secret", secret);
         params.put("command", commandType);
         params.put("search", search);
-        String result = Post.sendPostData(params, "api/command/search");
+        String result = Post.sendPostData(params, "api/command/search", secret);
         Gson gson = new Gson();
         return gson.fromJson(result, Search[].class);
     }
