@@ -1,114 +1,117 @@
 package com.teamgames.endpoints.playersonline;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
- * 
+ * Handles periodic updates to the EverythingRS server with the current number of online players.
  * @author Nelson
- *
+ * @contributor Valk
  */
 
-public class PlayersOnline {
-	
-	public String message;
 
-	public static ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-	private static AtomicInteger players = new AtomicInteger();
-	
+public class PlayersOnline {
+
+	private static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+	private static final AtomicInteger players = new AtomicInteger();
+	private static final Gson gson = new Gson();
+
+	private String message;
+
 	/**
-	 * Gets the scheduled executor service thread
-	 * @return service
+	 * Gets the scheduled executor service thread (use with caution).
+	 *
+	 * @return the scheduled executor
 	 */
-	
-	public ScheduledExecutorService getService() {
+	public static ScheduledExecutorService getService() {
 		return service;
 	}
-	
+
 	/**
-	 * Starts the players online service, it will send a message to the EverythingRS server
-	 * every 5 minutes to update the player count. 
-	 * @param secret Your account secret key. This can be found in the account panel
-	 * at https://everythingrs.com/account
-	 * @param minutes The number of minutes until the next update is sent to our server.
-	 * by default it will send a call every 5 minutes. If you wish for the players online to update
-	 * even slow you can set the minutes to a higher number such as 60 which will make it call 
-	 * once every hour. For free accounts you can not set the call to less than 5 minutes. 
-	 * Premium members can update every 2 minutes. 
-	 * @param debug Set this to false if you do not wish to receive any debug messages back from 
-	 * our server.
+	 * Starts the players online service. This sends a message to the EverythingRS server
+	 * at a fixed interval to update the player count.
+	 *
+	 * @param secret  Your account secret key from EverythingRS.
+	 * @param minutes Interval in minutes between updates (min: 5 for free, 2 for premium).
+	 * @param debug   If true, prints debug messages from the server.
 	 */
-	
 	public static void init(String secret, int minutes, boolean debug) {
-		service.scheduleAtFixedRate(new Runnable() {
-			public void run() {
-				insert(secret, players.get(), debug);
-			}
-		}, 0, minutes, TimeUnit.MINUTES);
+		if (minutes < 5 && !debug) {
+			throw new IllegalArgumentException("Free accounts must use an interval of 5 minutes or more.");
+		}
+
+		service.scheduleAtFixedRate(
+				() -> insert(secret, players.get(), debug),
+				0,
+				minutes,
+				TimeUnit.MINUTES
+		);
 	}
-	
+
 	/**
-	 * Updates your players online counter
-	 * @param secret the secret key of your account
-	 * @param count the amount of players currently online
-	 * @param debug sends back a debug message from the server
+	 * Sends an update with the current player count to the EverythingRS server.
+	 *
+	 * @param secret Your EverythingRS secret key
+	 * @param count  The current number of players online
+	 * @param debug  If true, prints the server response message
 	 */
-	
 	public static void insert(String secret, int count, boolean debug) {
 		try {
 			Map<String, Object> params = new LinkedHashMap<>();
 			params.put("secret", secret);
 			params.put("count", count);
-			final String req = Post.sendPostData(params, "api/playersonline/update", secret);
-			if (debug)
-				System.out.println(new Gson().fromJson(req, PlayersOnline.class).message);
+
+			String response = Post.sendPostData(params, "api/playersonline/update", secret);
+
+			if (debug) {
+				PlayersOnline parsed = gson.fromJson(response, PlayersOnline.class);
+				System.out.println(parsed.message);
+			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			if (debug) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	/**
-	 * Increments the playercount by the value you enter
-	 * @param amount
+	 * Atomically increments the player count.
+	 *
+	 * @param amount amount to add
 	 */
-	
 	public static void increment(int amount) {
-		players.set(players.get() + amount);
+		players.addAndGet(amount);
 	}
-	
+
 	/**
-	 * Decrements the playercount by the value you enter
-	 * @param amount
+	 * Atomically decrements the player count.
+	 *
+	 * @param amount amount to subtract
 	 */
-	
 	public static void decrement(int amount) {
-		players.set(players.get() - amount);
+		players.addAndGet(-amount);
 	}
-	
+
 	/**
-	 * Sets the value of the playercount to whichever
-	 * value you enter
-	 * @param amount
+	 * Atomically sets the player count.
+	 *
+	 * @param amount the exact value to set
 	 */
-	
 	public static void set(int amount) {
 		players.set(amount);
 	}
-	
+
 	/**
-	 * Gets the atomic integer for playercount
-	 * @return
+	 * Retrieves the current player count.
+	 *
+	 * @return current online player count
 	 */
-	
 	public static int get() {
 		return players.get();
 	}
-
 }
