@@ -1,12 +1,15 @@
 package com.teamgames.https;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Utility class for sending HTTP POST requests.
@@ -27,9 +30,8 @@ public class Post {
     public static String sendPostData(Map<String, Object> params, String location, String apiKey) throws Exception {
         String domain = local.get() ? "http://192.168.214.78:1354/" : "https://api.teamgames.io/";
         String target = domain + location;
-        @SuppressWarnings("deprecation")
-		URL url = new URL(target);
-        
+        URL url = new URL(target);
+
         byte[] postDataBytes = constructPostData(params);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         configureConnection(conn, postDataBytes, apiKey);
@@ -52,7 +54,7 @@ public class Post {
             postData.append('=');
             postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
         }
-        return postData.toString().getBytes("UTF-8");
+        return postData.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -69,6 +71,9 @@ public class Post {
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
         conn.setDoOutput(true);
+        conn.setUseCaches(false);
+        conn.setInstanceFollowRedirects(false);
+        HttpClientConfig.apply(conn);
     }
 
     /**
@@ -80,14 +85,12 @@ public class Post {
      * @throws Exception if an error occurs during the request.
      */
     private static String performPostRequest(HttpURLConnection conn, byte[] postDataBytes) throws Exception {
-        conn.getOutputStream().write(postDataBytes);
-        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        StringBuilder response = new StringBuilder();
-        for (int c; (c = in.read()) >= 0;) {
-            response.append((char) c);
+        try (java.io.OutputStream out = conn.getOutputStream()) {
+            out.write(postDataBytes);
+            out.flush();
         }
-        in.close();
-        return response.toString();
+
+        return readResponse(conn);
     }
 
     /**
@@ -97,5 +100,27 @@ public class Post {
      */
     public static void setLocal(boolean isLocal) {
         local.set(isLocal);
+    }
+
+    private static String readResponse(HttpURLConnection conn) throws IOException {
+        final int status = conn.getResponseCode();
+        InputStream stream = status >= HttpURLConnection.HTTP_BAD_REQUEST ? conn.getErrorStream() : conn.getInputStream();
+        if (stream == null) {
+            return "";
+        }
+        StringBuilder response = new StringBuilder();
+        try (Reader in = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+            char[] buffer = new char[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                response.append(buffer, 0, read);
+            }
+        }
+
+        if (status >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            throw new IOException("HTTP " + status + " :: " + response);
+        }
+
+        return response.toString();
     }
 }

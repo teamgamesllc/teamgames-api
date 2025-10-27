@@ -1,6 +1,7 @@
 package com.teamgames.tests.request;
 
 import com.teamgames.endpoints.store.Transaction;
+import com.teamgames.endpoints.store.StoreClaimClient;
 
 /**
  * @author Nelson A class that handles the "claim" command for players in a
@@ -65,33 +66,40 @@ public class TestStoreCommand {
 			return;
 		}
 
-		java.util.concurrent.CompletableFuture.supplyAsync(() -> {
-		    try {
-				return new Transaction().setApiKey(apiKey).setPlayerName(playerName).getTransactions();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}, com.teamgames.util.Thread.executor).thenAcceptAsync(transactions -> {
-		    String completedMessage = null;
-		    boolean processTransaction = false;
+        StoreClaimClient transactionClient = new StoreClaimClient(apiKey);
 
-		    if (transactions == null) {
-		        completedMessage = "An error occurred while processing your request.";
-		    } else if (transactions.length == 0) {
-		        completedMessage = "You currently don't have any items waiting. You must make a purchase first!";
-		    } else if (transactions[0].message != null) {
-		        completedMessage = transactions[0].message;
-		    } else {
-		        completedMessage = "Thank you for supporting the server!";
-		        processTransaction = true;
-		    }
+        java.util.concurrent.CompletableFuture.supplyAsync(() -> {
+            try {
+                return transactionClient.newRequest()
+                        .playerName(playerName)
+                        .useV4Endpoint()
+                        .execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }, com.teamgames.util.Thread.executor).thenAcceptAsync(response -> {
+ 	    String completedMessage = null;
+ 	    boolean processTransaction = false;
 
-		    if (processTransaction) {
-		        for (Transaction transaction : transactions) {
-		            System.out.println("Adding item to inventory: ID=" + transaction.product_id + ", Amount=" + transaction.product_amount);
-		        }
-		    }
+	    if (response == null) {
+ 		completedMessage = "An error occurred while processing your request.";
+	    } else if (response.data == null || response.data.claims == null || response.data.claims.length == 0) {
+		completedMessage = response.message != null && !response.message.isEmpty()
+			? response.message
+			: "You currently don't have any items waiting. You must make a purchase first!";
+	    } else if (!"SUCCESS".equals(response.status)) {
+		completedMessage = response.message != null ? response.message : "Unable to fulfill the request.";
+	    } else {
+		completedMessage = "Thank you for supporting the server!";
+		processTransaction = true;
+ 	    }
+
+	    if (processTransaction) {
+	        for (Transaction transaction : response.data.claims) {
+	            System.out.println("Adding item to inventory: ID=" + transaction.product_id + ", Amount=" + transaction.product_amount);
+	        }
+ 	    }
 
 		    if (completedMessage != null) {
 		        System.out.println(completedMessage);

@@ -4,20 +4,24 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class RateLimiter {
-//    private static final long MAX_REQUESTS = 10; // Max requests per time window
-//    private static final long TIME_WINDOW_MS = TimeUnit.MINUTES.toMillis(1); // Time window in milliseconds
-    
+
     private static class RequestData {
         long startTime;
         long requestCount;
     }
-    
-    private final static ConcurrentHashMap<String, RequestData> clientRequestData = new ConcurrentHashMap<>();
 
-    public static boolean isRequestAllowed(String clientId, long MAX_REQUESTS, long MINUTES) {
+    private static final ConcurrentHashMap<String, RequestData> clientRequestData = new ConcurrentHashMap<>();
+    private static volatile long lastCleanup = 0L;
+    private static final long CLEANUP_INTERVAL_MS = TimeUnit.MINUTES.toMillis(5);
+
+    public static boolean isRequestAllowed(String clientId, long maxRequests, long minutes) {
         long currentTime = System.currentTimeMillis();
+        long windowMs = TimeUnit.MINUTES.toMillis(minutes);
+
+        maybeCleanup(currentTime, windowMs);
+
         RequestData data = clientRequestData.compute(clientId, (key, requestData) -> {
-            if (requestData == null || currentTime - requestData.startTime > TimeUnit.MINUTES.toMillis(MINUTES)) {
+            if (requestData == null || currentTime - requestData.startTime > windowMs) {
                 requestData = new RequestData();
                 requestData.startTime = currentTime;
                 requestData.requestCount = 0;
@@ -26,6 +30,21 @@ public class RateLimiter {
             return requestData;
         });
 
-        return data.requestCount <= MAX_REQUESTS;
+        return data.requestCount <= maxRequests;
+    }
+
+    private static void maybeCleanup(long currentTime, long windowMs) {
+        if (currentTime - lastCleanup < CLEANUP_INTERVAL_MS) {
+            return;
+        }
+
+        synchronized (RateLimiter.class) {
+            if (currentTime - lastCleanup < CLEANUP_INTERVAL_MS) {
+                return;
+            }
+
+            clientRequestData.entrySet().removeIf(entry -> currentTime - entry.getValue().startTime > windowMs);
+            lastCleanup = currentTime;
+        }
     }
 }
