@@ -152,6 +152,8 @@ public class StoreCatalog {
         public final String productId;
         public final String name;
         public final double price;
+        public final double priceOriginal;
+        public final double priceWithSale;
         public final int quantity;
         public final String description;
         public final String image;
@@ -160,10 +162,22 @@ public class StoreCatalog {
 
         public Product(long id, String productId, String name, double price, int quantity,
                        String description, String image, boolean disabled, Sale[] sales) {
+            this(id, productId, name, price, price, price, quantity, description, image, disabled, sales);
+        }
+
+        public Product(long id, String productId, String name, double price, double priceOriginal,
+                       double priceWithSale, int quantity, String description, String image,
+                       boolean disabled, Sale[] sales) {
             this.id = id;
             this.productId = productId;
             this.name = name;
             this.price = price;
+            this.priceOriginal = priceOriginal > 0 ? priceOriginal : price;
+            double normalizedSale = priceWithSale > 0 ? priceWithSale : this.priceOriginal;
+            if (!Double.isFinite(normalizedSale) || normalizedSale < 0) {
+                normalizedSale = this.priceOriginal;
+            }
+            this.priceWithSale = normalizedSale;
             this.quantity = quantity;
             this.description = description;
             this.image = image;
