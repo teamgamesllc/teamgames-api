@@ -36,11 +36,23 @@ public final class StoreCatalogClient {
         return catalog.fetch();
     }
 
+    public StoreCatalog.CatalogResponse fetchByCategory(int categoryId) throws Exception {
+        return catalog.fetchByCategory(categoryId);
+    }
+
     public CompletableFuture<StoreCatalog.CatalogResponse> fetchAsync() {
         return catalog.fetchAsync(defaultExecutor);
     }
 
     public CompletableFuture<StoreCatalog.CatalogResponse> fetchAsync(Executor executor) {
         return catalog.fetchAsync(executor);
+    }
+
+    public CompletableFuture<StoreCatalog.CatalogResponse> fetchByCategoryAsync(int categoryId) {
+        return catalog.fetchByCategoryAsync(categoryId, defaultExecutor);
+    }
+
+    public CompletableFuture<StoreCatalog.CatalogResponse> fetchByCategoryAsync(int categoryId, Executor executor) {
+        return catalog.fetchByCategoryAsync(categoryId, executor);
     }
 }

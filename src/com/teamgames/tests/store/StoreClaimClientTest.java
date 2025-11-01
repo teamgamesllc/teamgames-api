@@ -67,7 +67,7 @@ public class StoreClaimClientTest {
         System.out.println(label + " call status: " + response.status + " (" + response.code + ")");
         System.out.println(label + " call returned " + response.data.claims.length + " deliverable item(s):");
         for (Transaction tx : response.data.claims) {
-            System.out.printf("  • product %d x %d for player %s%n", tx.product_id, tx.product_amount, tx.player_name);
+            System.out.printf("  • product %d x %d for player %s%n", tx.product_id, tx.quantity_to_grant, tx.player_name);
         }
         System.out.println("Grant items in-game and mark them as delivered.");
     }

@@ -10,6 +10,7 @@ import com.teamgames.https.Post;
 import com.teamgames.lib.gson.Gson;
 import com.teamgames.lib.gson.JsonElement;
 import com.teamgames.lib.gson.JsonObject;
+import com.teamgames.lib.gson.SerializedName;
 import com.teamgames.util.Thread;
 
 /**
@@ -23,12 +24,14 @@ public class Transaction {
 
   private static final Gson GSON = new Gson();
 
-  // Claim item fields (legacy structure retained)
+  // Claim item fields (legacy structure retained for v3 compatibility)
   public final String player_name;
   public final int product_id;
   public final String product_id_string;
-  public final int product_amount;
-  public final int amount_purchased;
+  @SerializedName(value = "quantity_to_grant", alternate = {"product_amount"})
+  public final int quantity_to_grant;
+  @SerializedName(value = "quantity_purchased", alternate = {"amount_purchased"})
+  public final int quantity_purchased;
   public final String product_name;
   public final double product_price;
 
@@ -43,13 +46,13 @@ public class Transaction {
     this(null, 0, null, 0, 0, null, 0d);
   }
 
-  public Transaction(String player_name, int product_id, String product_id_string, int product_amount, int amount_purchased,
+  public Transaction(String player_name, int product_id, String product_id_string, int quantity_to_grant, int quantity_purchased,
                      String product_name, double product_price) {
     this.player_name = player_name;
     this.product_id = product_id;
     this.product_id_string = product_id_string;
-    this.product_amount = product_amount;
-    this.amount_purchased = amount_purchased;
+    this.quantity_to_grant = quantity_to_grant;
+    this.quantity_purchased = quantity_purchased;
     this.product_name = product_name;
     this.product_price = product_price;
   }
@@ -205,8 +208,8 @@ public class Transaction {
         claim.player_name,
         claim.product_id,
         productIdString,
-        claim.product_amount,
-        claim.amount_purchased,
+        claim.quantity_to_grant,
+        claim.quantity_purchased,
         claim.product_name,
         claim.product_price
       );

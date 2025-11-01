@@ -3,6 +3,7 @@ package com.teamgames.endpoints.store;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import com.teamgames.https.JsonPost;
 import com.teamgames.lib.gson.Gson;
@@ -58,27 +59,14 @@ public class StoreCatalog {
      * @throws Exception if the request fails.
      */
     public synchronized CatalogResponse fetch() throws Exception {
-        if (apiKey == null || apiKey.trim().isEmpty()) {
-            throw new IllegalStateException("API key must be set before fetching the catalog.");
+        return fetchInternal(null);
+    }
+
+    public synchronized CatalogResponse fetchByCategory(int categoryId) throws Exception {
+        if (categoryId <= 0) {
+            throw new IllegalArgumentException("categoryId must be greater than zero.");
         }
-
-        String keySignature = Base64.getEncoder().encodeToString(apiKey.getBytes(StandardCharsets.UTF_8));
-        long now = System.currentTimeMillis();
-
-        if (cachedResponse != null
-                && keySignature.equals(cachedKeySignature)
-                && (cacheTtlMs == 0 || now - cacheTimestamp < cacheTtlMs)) {
-            return cachedResponse;
-        }
-
-        String response = JsonPost.send("{}", ENDPOINT_URL, apiKey);
-        CatalogResponse parsed = GSON.fromJson(response, CatalogResponse.class);
-
-        cachedResponse = parsed;
-        cacheTimestamp = now;
-        cachedKeySignature = keySignature;
-
-        return parsed;
+        return fetchInternal(Integer.valueOf(categoryId));
     }
 
     /**
@@ -88,7 +76,7 @@ public class StoreCatalog {
         return fetchAsync(Thread.executor);
     }
 
-    public CompletableFuture<CatalogResponse> fetchAsync(java.util.concurrent.Executor executor) {
+    public CompletableFuture<CatalogResponse> fetchAsync(Executor executor) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 return fetch();
@@ -96,6 +84,55 @@ public class StoreCatalog {
                 throw new RuntimeException(ex);
             }
         }, executor);
+    }
+
+    public CompletableFuture<CatalogResponse> fetchByCategoryAsync(int categoryId) {
+        return fetchByCategoryAsync(categoryId, Thread.executor);
+    }
+
+    public CompletableFuture<CatalogResponse> fetchByCategoryAsync(int categoryId, Executor executor) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return fetchByCategory(categoryId);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }, executor);
+    }
+
+    private CatalogResponse fetchInternal(Integer categoryId) throws Exception {
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            throw new IllegalStateException("API key must be set before fetching the catalog.");
+        }
+
+        String categoryKey = categoryId == null ? "ALL" : ("CATEGORY-" + categoryId);
+        String keySignature = Base64.getEncoder().encodeToString(apiKey.getBytes(StandardCharsets.UTF_8)) + '|' + categoryKey;
+        long now = System.currentTimeMillis();
+
+        if (cachedResponse != null
+                && keySignature.equals(cachedKeySignature)
+                && (cacheTtlMs == 0 || now - cacheTimestamp < cacheTtlMs)) {
+            return cachedResponse;
+        }
+
+        String payload = categoryId == null ? "{}" : GSON.toJson(new CatalogRequest(categoryId));
+        String response = JsonPost.send(payload, ENDPOINT_URL, apiKey);
+        CatalogResponse parsed = GSON.fromJson(response, CatalogResponse.class);
+
+        cachedResponse = parsed;
+        cacheTimestamp = now;
+        cachedKeySignature = keySignature;
+
+        return parsed;
+    }
+
+    private static final class CatalogRequest {
+        @SuppressWarnings("unused")
+        final int categoryId;
+
+        CatalogRequest(int categoryId) {
+            this.categoryId = categoryId;
+        }
     }
 
     public static class CatalogResponse {

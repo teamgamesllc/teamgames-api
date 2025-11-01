@@ -9,6 +9,8 @@ import com.teamgames.endpoints.store.StoreCatalog.Product;
 import com.teamgames.endpoints.store.StoreCatalogClient;
 import com.teamgames.endpoints.store.StoreCheckoutClient;
 import com.teamgames.endpoints.store.StoreCheckout.CheckoutResponse;
+import com.teamgames.https.JsonPost;
+import com.teamgames.https.Post;
 
 /**
  * Convenience entry point for exercising the catalog + checkout flow.
@@ -22,12 +24,16 @@ import com.teamgames.endpoints.store.StoreCheckout.CheckoutResponse;
 public class StoreApiDemo {
 
     public static void main(String[] args) throws Exception {
-        String apiKey = "Test";
+        String apiKey = "test-key";
         if (apiKey == null || apiKey.trim().isEmpty()) {
             throw new IllegalStateException("TEAMGAMES_API_KEY environment variable is not set.");
         }
 
         boolean runCheckout = "true".equalsIgnoreCase(System.getenv("TEAMGAMES_RUN_CHECKOUT"));
+
+        // Point HTTP helpers at the local API for this thread (cleared automatically after use).
+        JsonPost.setLocal(true);
+        Post.setLocal(true);
 
         System.out.println("Fetching catalog…");
         StoreCatalogClient catalogClient = new StoreCatalogClient(apiKey);

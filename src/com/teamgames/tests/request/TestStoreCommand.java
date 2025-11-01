@@ -31,7 +31,7 @@ public class TestStoreCommand {
 //					}
 //					for (Transaction transaction : transactions) {
 //						System.out.println(transaction.product_id);
-//						System.out.println(transaction.product_amount);
+//						System.out.println(transaction.quantity_to_grant);
 //					}
 //					System.out.println("Thank you for donating!");
 //				} catch (Exception e) {
@@ -97,7 +97,7 @@ public class TestStoreCommand {
 
 	    if (processTransaction) {
 	        for (Transaction transaction : response.data.claims) {
-	            System.out.println("Adding item to inventory: ID=" + transaction.product_id + ", Amount=" + transaction.product_amount);
+	            System.out.println("Adding item to inventory: ID=" + transaction.product_id + ", Amount=" + transaction.quantity_to_grant);
 	        }
  	    }
 
