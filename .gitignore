@@ -18,3 +18,6 @@ out/
 # OS artifacts
 .DS_Store
 Thumbs.db
+
+# Windows zone identifier files
+*.Zone.Identifier
