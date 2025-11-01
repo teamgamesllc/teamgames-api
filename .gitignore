@@ -5,3 +5,16 @@ build/*
 classes/*
 .gradle/*
 .classpath
+
+# IntelliJ / IDE
+.idea/
+*.iml
+
+# Compiled output
+out/
+*.class
+*.jar
+
+# OS artifacts
+.DS_Store
+Thumbs.db

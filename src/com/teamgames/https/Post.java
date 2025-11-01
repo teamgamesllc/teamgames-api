@@ -20,7 +20,7 @@ public class Post {
 
     /**
      * Sends a POST request to the specified server and fetches the response.
-     * 
+     *
      * @param params   The POST parameters to send.
      * @param location The URL location or website directory to send the parameters to.
      * @param apiKey   The API key for authentication.
@@ -28,9 +28,11 @@ public class Post {
      * @throws Exception if an error occurs during the POST request.
      */
     public static String sendPostData(Map<String, Object> params, String location, String apiKey) throws Exception {
-        String domain = local.get() ? "http://192.168.214.78:1354/" : "https://api.teamgames.io/";
+        String domain = local.get() ? "http://172.25.142.86:1353/" : "https://api.teamgames.io/";
         String target = domain + location;
         URL url = new URL(target);
+        System.out.println("The target is : " + target);
+
 
         byte[] postDataBytes = constructPostData(params);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -41,7 +43,7 @@ public class Post {
 
     /**
      * Constructs the POST data from a map of parameters.
-     * 
+     *
      * @param params The parameters to encode.
      * @return The encoded POST data as a byte array.
      * @throws Exception if an encoding error occurs.
@@ -59,7 +61,7 @@ public class Post {
 
     /**
      * Configures the HttpURLConnection with necessary headers and settings.
-     * 
+     *
      * @param conn          The connection to configure.
      * @param postDataBytes The POST data bytes to set content length.
      * @param apiKey        The API key for authentication.
@@ -78,7 +80,7 @@ public class Post {
 
     /**
      * Performs the actual POST request.
-     * 
+     *
      * @param conn          The configured HttpURLConnection.
      * @param postDataBytes The POST data bytes to be sent.
      * @return The response as a String.
@@ -95,7 +97,7 @@ public class Post {
 
     /**
      * Sets or clears the local testing mode.
-     * 
+     *
      * @param isLocal If true, local domain will be used.
      */
     public static void setLocal(boolean isLocal) {
