@@ -27,6 +27,7 @@ import static com.teamgames.lib.gson.Gson.DEFAULT_SPECIALIZE_FLOAT_VALUES;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -397,7 +398,11 @@ public final class GsonBuilder {
    * @since 1.2
    */
   public GsonBuilder setDateFormat(String pattern) {
-    // TODO(Joel): Make this fail fast if it is an invalid date format
+    try {
+      new SimpleDateFormat(datePattern);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid date pattern: " + datePattern, e);
+    }
     this.datePattern = pattern;
     return this;
   }
